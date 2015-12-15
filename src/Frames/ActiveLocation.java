@@ -244,6 +244,26 @@ public class ActiveLocation {
                 new ErrorHandling().activelocationMissing("sem1227Yj_l[Beromv", ex, "ioexception in removeActiveLocation activelocation is present maybe problem with creation of temp file.");
             }
     }
+
+    public static void removeAllActiveLocations () {
+        try {
+            File from = null;
+            try {
+                from = new File(pathlocation.getolocation() + "activelocation.txt");
+            } catch (Exception ex) {
+                //bugno sem1217Yj_l[Beromp
+                new ErrorHandling().activelocationMissing("sem1217Yj_l[Beromp", ex, "could not find activelocation in removeAllActiveLocations.");
+            }
+            BufferedWriter writer = null;
+            writer = new BufferedWriter(new FileWriter(from));
+            writer.write("");
+            writer.close();
+        } catch (IOException ex) {
+                //bugno sem1227Yj_l[Beronp
+                new ErrorHandling().activelocationMissing("sem1227Yj_l[Beronp", ex, "ioexception in removeAllActiveLocations activelocation is present maybe problem with writing to file.");
+            }
+    }
+
     public static boolean isActiveLocation(String s) {
         Scanner scan = null;
         try {

@@ -346,6 +346,16 @@ static String year,y1,y2,y3;
 
     @Override
 	  public void setValueAt(Object value, int row, int column) {
+              if (column == 2 && value != null && !(value + "").isEmpty())
+              {
+                  try
+                  {
+                      Integer.parseInt(value + "");
+                  } catch (Exception e)
+                  {
+                      return;
+                  }
+              }
 	    data[row][column] = value;
 	      fireTableRowsUpdated(row, row);
  
