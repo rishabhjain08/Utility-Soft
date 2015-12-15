@@ -474,75 +474,62 @@ public class print extends Thread {
 	}
 
 	public String towords( String s){
-
-
-		String abrupttens[]={"Ten","Eleven","Twelve","Thirteen","Fourteen","Fifteen","Sixteen","Seventeen","Eighteen","Ninteen"};
-		String numbersatfirst[]={"Twenty","Thirty","Fourty","Fifty","Sixty","Seventy","Eigthy","Ninty"};
-		String h="";
-		String units[]={"Hundred","Thousand","Lakh","Crore"};
-		String[] singlenum={"One","Two","Three","Four","Five","Six","Seven","Eight","Nine"};
-		if(s.length()>3){
-			String job=s.substring(0, s.length()-3);
-			int end=job.length();
-			int  begin;
-			if(job.length()>1)
-				begin=end-2;
-			else
-				begin=end-1;
-			int num=0;
-			int index=1;
-			while(end>0){
-				if(begin==-1)
-					begin=0;
-				num=Integer.parseInt(job.substring(begin, end));
-				if(num>0&&num<10)
-					h= (singlenum[num-1]+" "+units[index]+" ").concat(h);
-				else if(num>=10&&num<20)
-					h=(abrupttens[num-10]+" "+units[index]+" ").concat(h);
-				else if(num>=20&&num<=99){
-					if(num%10==0)
-						h=  (numbersatfirst[num/10-2]+" "+units[index]+" ").concat( h);
-					else
-						h=((numbersatfirst[num/10-2]+" "+singlenum[num%10-1])+" "+units[index]+" ").concat(h);
-				}
-				index++;
-				end-=2;
-				begin=end-2;
-			}
-		}
-
-
-		while(s.length()<3){
-			s="0".concat(s);
-		}
-
-
-		String lastthree=s.substring(s.length()-3, s.length());
-		if(Integer.parseInt(Character.toString(lastthree.charAt(0)))!=0){
-			h=h+singlenum[Integer.parseInt(Character.toString(lastthree.charAt(0)))-1]+" Hundred ";
-
-		}
-		if(Integer.parseInt(lastthree.substring(lastthree.length()-2, lastthree.length()))!=0)
-			h=h+"and ";
-		int num=Integer.parseInt(lastthree.substring(lastthree.length()-2, lastthree.length()));
-		if(num>0&&num<10)
-			h=h+ singlenum[num-1];
-		else if(num>=10&&num<20)
-			h=h+abrupttens[num-10];
-		else if(num>=20&&num<=99){
-			if(num%10==0)
-				h= h+ numbersatfirst[num/10-2];
-			else
-				h=h+(numbersatfirst[num/10-2]+" "+singlenum[num%10-1]);
-
-		}
-		if(h.equals(""))
-			return "Zero";
-		else
-			return h;
+            return toWords(Integer.parseInt(s));
 	}
 
-	@Override
+        public static String toWords (int num)
+        {
+            if (num == 0)
+                return "Zero";
+                    String unitsStr[] = {"Thousand","Lakh","Crore"};
+                    String resp = "";
+                    String tempResp = null;
+                    int tempNum = 0;
+                    //last two digits
+                    resp = twoDigitToStr(num % 100);
+            num /= 100;		
+            //3rd digit
+            tempResp = twoDigitToStr(num % 10);
+            resp = tempResp + (!tempResp.isEmpty() ? " Hundred" : "") + (!tempResp.isEmpty() && !resp.isEmpty() ? " and " : "") + resp;
+            num /= 10;
+            //in block of two digits, from now on
+            int indexer = 0;
+            while (num > 0)
+            {
+                tempResp = twoDigitToStr(num % 100);
+                tempResp += (!tempResp.isEmpty() ? " " + unitsStr[indexer++] : "");
+                num /= 100;
+                resp = tempResp + (!tempResp.isEmpty() && !resp.isEmpty() ? " " : "") + resp;
+            }
+            return resp;
+        }
+    
+        private static String twoDigitToStr (int num)
+        {
+            if (num == 0)
+                return "";
+            String[] oneStr = new String[]{"One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine"};
+            String[] tenStr = new String[]{"Twenty","Thirty","Fourty","Fifty","Sixty","Seventy","Eigthy","Ninty"};
+                    String specialTenStr[] = new String[]{"Ten","Eleven","Twelve","Thirteen","Fourteen","Fifteen","Sixteen","Seventeen","Eighteen","Ninteen"};
+            int oneDigit = num % 10;
+            int tenDigit = num / 10;
+            String resp = "";
+            if (tenDigit == 0)
+            {
+                resp = oneStr[oneDigit - 1];
+            }
+            else if (tenDigit == 1)
+            {
+                resp = specialTenStr[oneDigit];
+            }
+            else
+            {
+                resp = tenStr[tenDigit - 2] + (oneDigit > 0 ? " " + oneStr[oneDigit - 1] : "");
+            }
+            return resp;
+        }
+
+    @Override
  	public void run() {
 		//throw new UnsupportedOperationException("Not supported yet.");
 		this.print();
