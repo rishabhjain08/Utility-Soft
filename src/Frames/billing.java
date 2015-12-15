@@ -85,7 +85,8 @@ static finalbackup finalbackup;
     public class billingwindowlistener implements WindowListener{
 
         public void windowOpened(WindowEvent e) {
-//            throw new UnsupportedOperationException("Not supported yet.");
+//            throw new UnsupportedOperationException("Not supported yet.");    
+            ActiveLocation.removeAllActiveLocations();
            }
 
         public void windowClosing(WindowEvent e) {
@@ -2040,6 +2041,7 @@ public void refresh(){
             jTable1.setValueAt(null, k, 2);
             k++;
         }
+        System.out.println(f.getAbsolutePath());
          String[] list=new SortAlphabatically().sort(f.list());
          int i=0;
          while(i<list.length){
